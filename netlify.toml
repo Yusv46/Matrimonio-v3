@@ -1,0 +1,75 @@
+[build]
+  publish = "."
+  command = ""
+
+[build.environment]
+  NODE_VERSION = "18"
+
+# Headers per sicurezza e performance
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
+    Content-Security-Policy = "default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.tailwindcss.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https://wallpaper.dog https://images.unsplash.com https://images2.alphacoders.com https://images5.alphacoders.com https://images7.alphacoders.com https://www.info-turismo.it https://www.melarossa.it https://png.pngtree.com data:; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; connect-src 'self';"
+
+# Cache risorse statiche
+[[headers]]
+  for = "*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.woff2"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.woff"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.jpg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Redirect alle sezioni
+[[redirects]]
+  from = "/home"
+  to = "/#home"
+  status = 301
+
+[[redirects]]
+  from = "/itinerary"
+  to = "/#itinerary"
+  status = 301
+
+[[redirects]]
+  from = "/gallery"
+  to = "/#gallery"
+  status = 301
+
+[[redirects]]
+  from = "/contribute"
+  to = "/#contribute"
+  status = 301
+
+# Fallback per SPA
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
