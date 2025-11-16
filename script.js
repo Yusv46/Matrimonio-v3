@@ -253,6 +253,106 @@ function copyIban() {
     }
 }
 
+function copyIntestatari() {
+    const intestatariTextEl = document.getElementById('intestatari-text');
+    const copyBtn = document.getElementById('copy-intestatari-btn');
+
+    if (!intestatariTextEl || !copyBtn) {
+        WeddingSite.Utils.handleError('Elementi non trovati', 'copyIntestatari');
+        return;
+    }
+
+    const textToCopy = intestatariTextEl.innerText.trim();
+
+    const updateButtonState = (message, type = 'success') => {
+        const originalText = copyBtn.innerText;
+        copyBtn.innerText = message;
+        copyBtn.className = copyBtn.className.replace(/bg-\w+-\w+/,
+            type === 'success' ? 'bg-green-500' : 'bg-red-500');
+
+        setTimeout(() => {
+            copyBtn.innerText = originalText;
+            copyBtn.className = copyBtn.className.replace(/bg-\w+-\w+/, 'bg-zen-gold');
+        }, 2000);
+    };
+
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(textToCopy)
+            .then(() => updateButtonState('✓ Copiato!', 'success'))
+            .catch(err => {
+                WeddingSite.Utils.handleError(err, 'Clipboard API');
+                updateButtonState('❌ Errore', 'error');
+            });
+    } else {
+        const textArea = document.createElement("textarea");
+        textArea.value = textToCopy;
+        textArea.style.position = "fixed";
+        textArea.style.opacity = "0";
+        document.body.appendChild(textArea);
+
+        try {
+            textArea.select();
+            const successful = document.execCommand('copy');
+            updateButtonState(successful ? '✓ Copiato!' : '❌ Errore', successful ? 'success' : 'error');
+        } catch (err) {
+            WeddingSite.Utils.handleError(err, 'Fallback copy');
+            updateButtonState('❌ Errore', 'error');
+        } finally {
+            document.body.removeChild(textArea);
+        }
+    }
+}
+
+function copyBanca() {
+    const bancaTextEl = document.getElementById('banca-text');
+    const copyBtn = document.getElementById('copy-banca-btn');
+
+    if (!bancaTextEl || !copyBtn) {
+        WeddingSite.Utils.handleError('Elementi non trovati', 'copyBanca');
+        return;
+    }
+
+    const textToCopy = bancaTextEl.innerText.trim();
+
+    const updateButtonState = (message, type = 'success') => {
+        const originalText = copyBtn.innerText;
+        copyBtn.innerText = message;
+        copyBtn.className = copyBtn.className.replace(/bg-\w+-\w+/,
+            type === 'success' ? 'bg-green-500' : 'bg-red-500');
+
+        setTimeout(() => {
+            copyBtn.innerText = originalText;
+            copyBtn.className = copyBtn.className.replace(/bg-\w+-\w+/, 'bg-zen-gold');
+        }, 2000);
+    };
+
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(textToCopy)
+            .then(() => updateButtonState('✓ Copiato!', 'success'))
+            .catch(err => {
+                WeddingSite.Utils.handleError(err, 'Clipboard API');
+                updateButtonState('❌ Errore', 'error');
+            });
+    } else {
+        const textArea = document.createElement("textarea");
+        textArea.value = textToCopy;
+        textArea.style.position = "fixed";
+        textArea.style.opacity = "0";
+        document.body.appendChild(textArea);
+
+        try {
+            textArea.select();
+            const successful = document.execCommand('copy');
+            updateButtonState(successful ? '✓ Copiato!' : '❌ Errore', successful ? 'success' : 'error');
+        } catch (err) {
+            WeddingSite.Utils.handleError(err, 'Fallback copy');
+            updateButtonState('❌ Errore', 'error');
+        } finally {
+            document.body.removeChild(textArea);
+        }
+    }
+}
+
 // --- Modale Immagini ---
 const imageModalData = {
     modal1: { src: 'https://www.info-turismo.it/wp-content/uploads/2019/06/hanami.jpg', caption: 'Ciliegi in fiore a Tokyo' },
@@ -490,6 +590,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('copy-btn')?.addEventListener('click', copyIban);
+    document.getElementById('copy-intestatari-btn')?.addEventListener('click', copyIntestatari);
+    document.getElementById('copy-banca-btn')?.addEventListener('click', copyBanca);
     document.getElementById('modal-close-btn')?.addEventListener('click', closeModal);
 
     // Gestione eventi con data-attributes
